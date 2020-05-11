@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flask Image Gallery</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Flask Image Gallery
+      </h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="notification is-{{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+      <form action="{{ url_for('images.upload') }}" method="POST" enctype="multipart/form-data">
+        <div class="field is-grouped is-grouped-centered">
+          <div class="control">
+            <div class="file has-name">
+              <label class="file-label">
+                <input class="file-input" type="file" name="file" id="file-input" />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Choose a file…
+                  </span>
+                </span>
+                <span class="file-name" id="upload-filename">
+                  No file selected
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="control">
+            <input type="submit" value="Upload" class="button is-primary" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Your Images
+        </h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {% if images %}
+      <div class="columns">
+        {% for image_row in images | batch(4, none) %}
+        <div class="row">
+          {% for image in image_row %}
+          {% if image %}
+          <figure class="image gallery-image">
+            <img src="{{ url_for('static', filename=image) }}" alt="{{ image }}" />
+          </figure>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="notification">
+        No images available!
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <script src="{{ url_for('static', filename='js/inputUpdate.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+.gallery-image {
+    max-width: 33%;
+    margin: 1rem;
+}
+
+.gallery-image:hover {
+    transform: scale(1.05);
+    transition: transform 200ms ease-in-out;
+}
+
+.columns {
+    display: flex;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
